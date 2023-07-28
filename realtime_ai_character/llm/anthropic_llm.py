@@ -47,5 +47,4 @@ class AnthropicLlm(LLM):
         docs = [d for d in docs if d.metadata['character_name'] == character.name]
         logger.info(f'Found {len(docs)} documents')
 
-        context = '\n'.join([d.page_content for d in docs])
-        return context
+        return '\n'.join([d.page_content for d in docs])

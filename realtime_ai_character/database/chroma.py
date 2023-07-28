@@ -14,9 +14,8 @@ if os.getenv('OPENAI_API_TYPE') == 'azure':
 
 
 def get_chroma():
-    chroma = Chroma(
+    return Chroma(
         collection_name='llm',
         embedding_function=embedding,
-        persist_directory='./chroma.db'
+        persist_directory='./chroma.db',
     )
-    return chroma

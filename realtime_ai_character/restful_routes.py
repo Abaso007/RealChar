@@ -20,25 +20,24 @@ if os.getenv('USE_AUTH', ''):
 
 async def get_current_user(request: Request):
     """Heler function for auth with Firebase."""
-    if os.getenv('USE_AUTH', ''):
-        # Extracts the token from the Authorization header
-        if 'Authorization' not in request.headers:
-            # Anonymous users.
-            return ""
-        token = request.headers.get('Authorization').split("Bearer ")[1]
-        try:
-            # Verify the token against the Firebase Auth API.
-            decoded_token = auth.verify_id_token(token)
-        except FirebaseError:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail='Invalid authentication credentials',
-                headers={'WWW-Authenticate': 'Bearer'},
-            )
-
-        return decoded_token
-    else:
+    if not os.getenv('USE_AUTH', ''):
         return ""
+    # Extracts the token from the Authorization header
+    if 'Authorization' not in request.headers:
+        # Anonymous users.
+        return ""
+    token = request.headers.get('Authorization').split("Bearer ")[1]
+    try:
+        # Verify the token against the Firebase Auth API.
+        decoded_token = auth.verify_id_token(token)
+    except FirebaseError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail='Invalid authentication credentials',
+            headers={'WWW-Authenticate': 'Bearer'},
+        )
+
+    return decoded_token
 
 
 @router.get("/status")
